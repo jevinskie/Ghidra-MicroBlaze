@@ -507,7 +507,13 @@ RB: rB is rB             {export rB;}
 
 :mts rS, RA is op05=0b100101 & op610=0b00000 & RA & op1617=0b11 & rS {}
 :mtse rS, RA is op05=0b100101 & op610=0b01000 & RA & op1617=0b11 & rS {}
+
 :mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS {}
+
+:mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS & imm14=0x0000 {
+     rD = pc;
+}
+
 :mfse rD, rS is op05=0b100101 & rD & op1115=0b01000 & op1617=0b10 & rS {}
 :msrclr rD, imm15 is op05=0b100101 & rD & op1116=0b100010 & imm15 {}
 :msrset rD, imm15 is op05=0b100101 & rD & op1116=0b100000 & imm15 {}
