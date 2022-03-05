@@ -41,6 +41,10 @@ define context imm_contextreg
 @define MSR_C     "msr[29,1]"
 @define MSR_IE    "msr[30,1]"
 
+
+define pcodeop software_interrupt;
+
+
 #@if ENDIAN == "little"
 
 define token instr(32)
@@ -889,6 +893,16 @@ RB: rB is rB             {export rB;}
 :bslli rD, RA, imms is op05=0b011001 & rD & RA & op1620=0b00000 & op2126=0b100000 & imms {
 	rD = (RA << imms) & 0;
 }
+
+:brk rD, RB is op05=0b100110 & rD & op1115=0b01100 & RB & op2131=0b00000000000 {
+     software_interrupt(RB);
+}
+
+:brki rD, imm is op05=0b101110 & rD & op1115=0b01100 & imm {
+     local tmp:4 = imm;
+     software_interrupt(tmp);
+}
+
 :bsefi rD, RA, immw, imms is op05=0b011001 & rD & RA & op1620=0b01000 & immw & op2626=0 & imms unimpl
 :bsifi rD, RA, immw, imms is op05=0b011001 & rD & RA & op1620=0b10000 & immw & op2626=0 & imms unimpl
 :tneaget.t rD, fsl is op05=0b011011 & rD & op1115=0 & op1627=0b000100000000 & fsl unimpl
@@ -911,7 +925,6 @@ RB: rB is rB             {export rB;}
 :clz rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000011100000 unimpl
 :swapb rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000111100000 unimpl
 :swaph rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000111100010 unimpl
-:brk rD, RB is op05=0b100110 & rD & op1115=0b01100 & RB & op2131=0b00000000000 unimpl
 :beq RA, RB is op05=0b100111 & op610=0b00000 & RA & RB & op2131=0b00000000000 unimpl
 :bne RA, RB is op05=0b100111 & op610=0b00001 & RA & RB & op2131=0b00000000000 unimpl
 :blt RA, RB is op05=0b100111 & op610=0b00010 & RA & RB & op2131=0b00000000000 unimpl
@@ -925,7 +938,6 @@ RB: rB is rB             {export rB;}
 :bgtd RA, RB is op05=0b100111 & op610=0b10100 & RA & RB & op2131=0b00000000000 unimpl
 :bged RA, RB is op05=0b100111 & op610=0b10101 & RA & RB & op2131=0b00000000000 unimpl
 :mbar imm3 is op05=0b101110 & imm3 & op1115=0b00010 & op1631=0b0000000000000100 unimpl
-:brki rD, imm is op05=0b101110 & rD & op1115=0b01100 & imm unimpl
 :lbur rD, RA, RB is op05=0b110000 & rD & RA & RB & op2131=0b01000000000 unimpl
 :lbuea rD, RA, RB is op05=0b110000 & rD & RA & RB & op2131=0b00010000000 unimpl
 :lhu rD, RA, RB is op05=0b110001 & rD & RA & RB & op2131=0b00000000000 unimpl
