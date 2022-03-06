@@ -538,7 +538,7 @@ RB: rB is rB             {export rB;}
 :mts rS, RA is op05=0b100101 & op610=0b00000 & RA & op1617=0b11 & rS {}
 :mtse rS, RA is op05=0b100101 & op610=0b01000 & RA & op1617=0b11 & rS {}
 
-:mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS {}
+:mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS unimpl
 
 :mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS & imm14=0x0000 {
      rD = pc;
@@ -760,8 +760,8 @@ RB: rB is rB             {export rB;}
 	rD[31,1] = (RA > RB);
 }
 :rsubkc rD, RA, RB is op05=0b000111 & rD & RA & RB & op2131=0b00000000000 {
-  local tmp:4 = zext($(MSR_C));
-  rD = RB + ~RA + tmp;
+     local tmp:4 = zext($(MSR_C));
+     rD = RB + ~RA + tmp;
 }
 :rsubi rD, RA, imm is op05=0b001001 & rD & RA & imm {
 	rD = imm + ~RA + 1;
@@ -903,6 +903,11 @@ RB: rB is rB             {export rB;}
      software_interrupt(tmp);
 }
 
+:lhu rD, RA, RB is op05=0b110001 & rD & RA & RB & op2131=0b00000000000 {
+     local address = RA + RB;
+     rD = zext(*[ram]:2 address);
+}
+
 :bsefi rD, RA, immw, imms is op05=0b011001 & rD & RA & op1620=0b01000 & immw & op2626=0 & imms unimpl
 :bsifi rD, RA, immw, imms is op05=0b011001 & rD & RA & op1620=0b10000 & immw & op2626=0 & imms unimpl
 :tneaget.t rD, fsl is op05=0b011011 & rD & op1115=0 & op1627=0b000100000000 & fsl unimpl
@@ -940,7 +945,6 @@ RB: rB is rB             {export rB;}
 :mbar imm3 is op05=0b101110 & imm3 & op1115=0b00010 & op1631=0b0000000000000100 unimpl
 :lbur rD, RA, RB is op05=0b110000 & rD & RA & RB & op2131=0b01000000000 unimpl
 :lbuea rD, RA, RB is op05=0b110000 & rD & RA & RB & op2131=0b00010000000 unimpl
-:lhu rD, RA, RB is op05=0b110001 & rD & RA & RB & op2131=0b00000000000 unimpl
 :lhur rD, RA, RB is op05=0b110001 & rD & RA & RB & op2131=0b01000000000 unimpl
 :lhuea rD, RA, RB is op05=0b110001 & rD & RA & RB & op2131=0b00010000000 unimpl
 :lwr rD, RA, RB is op05=0b110010 & rD & RA & RB & op2131=0b01000000000 unimpl
