@@ -398,9 +398,8 @@ RB: rB is rB             {export rB;}
    
 :brld rD, RB is op05=0b100110 & rD & op1115=0b10100 & RB & op2131=0b00000000000 {
     local tmp:4 = inst_start + RB;
-    local tmp2:4 = inst_start;
+    rD = inst_start;
     delayslot(1);
-    rD=tmp2;
     call [tmp];
 }
 
@@ -419,9 +418,8 @@ RB: rB is rB             {export rB;}
 
 :brald rD, RB is op05=0b100110 & rD & op1115=0b11100 & RB & op2131=0b00000000000 {
     local tmp:4 = RB;
-    local tmp2:4=inst_start;
+    rD = inst_start;
     delayslot(1);
-    rD=tmp2;
     call [tmp];
 }
 
