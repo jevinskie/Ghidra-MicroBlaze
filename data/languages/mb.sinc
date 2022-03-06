@@ -401,7 +401,7 @@ RB: rB is rB             {export rB;}
     local tmp2:4 = inst_start;
     delayslot(1);
     rD=tmp2;
-    goto [tmp];
+    call [tmp];
 }
 
 :braid imm is op05=0b101110 & op610=0 & op1115=0b11000 & imm & immop=0 {
@@ -422,7 +422,7 @@ RB: rB is rB             {export rB;}
     local tmp2:4=inst_start;
     delayslot(1);
     rD=tmp2;
-    goto [tmp];
+    call [tmp];
 }
 
 :bralid rD, imm is op05=0b101110 & rD & op1115=0b11100 & imm & immop=0 {
