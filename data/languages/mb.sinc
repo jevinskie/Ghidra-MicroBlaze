@@ -161,7 +161,7 @@ RB: rB is rB             {export rB;}
 }
 
 :addik rD, RA, imm is op05=0b001100 & rD & RA & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      rD = tmp + RA;
 }
 
@@ -690,7 +690,7 @@ RB: rB is rB             {export rB;}
 :srl rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000001000001 {
      local tmp:4 = RA;
         rD=RA >> 1;
-        $(MSR_C) = tmp[0,1];
+        $(MSR_C) = RA[0,1];
 }
 
 :sw rD, RA, RB is op05=0b110110 & rD & RA & RB & op2131=0b00000000000 {
