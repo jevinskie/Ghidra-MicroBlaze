@@ -475,7 +475,7 @@ RB: rB is rB             {export rB;}
 }
 
 :brlid rD, imm is op05=0b101110 & rD & op1115=0b10100 & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      tmp=tmp+inst_start;
      rD=tmp;
      delayslot(1);
@@ -483,7 +483,7 @@ RB: rB is rB             {export rB;}
 }
 
 :brlid rD, imm is op05=0b101110 & rD & op1115=0b10100 & imm & immop=1 {
-     tmp:4=inst_start+(imm_msb<<16)+imm;
+     local tmp:4=inst_start+(imm_msb<<16)+imm;
      rD=tmp;
      delayslot(1);
      call [tmp];
@@ -537,8 +537,8 @@ RB: rB is rB             {export rB;}
      rD = *[ram]:4 tmp;
 }
 
-:mts rS, RA is op05=0b100101 & op610=0b00000 & RA & op1617=0b11 & rS {}
-:mtse rS, RA is op05=0b100101 & op610=0b01000 & RA & op1617=0b11 & rS {}
+:mts rS, RA is op05=0b100101 & op610=0b00000 & RA & op1617=0b11 & rS unimpl
+:mtse rS, RA is op05=0b100101 & op610=0b01000 & RA & op1617=0b11 & rS unimpl
 
 :mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS unimpl
 
@@ -546,9 +546,9 @@ RB: rB is rB             {export rB;}
      rD = inst_start;
 }
 
-:mfse rD, rS is op05=0b100101 & rD & op1115=0b01000 & op1617=0b10 & rS {}
-:msrclr rD, imm15 is op05=0b100101 & rD & op1116=0b100010 & imm15 {}
-:msrset rD, imm15 is op05=0b100101 & rD & op1116=0b100000 & imm15 {}
+:mfse rD, rS is op05=0b100101 & rD & op1115=0b01000 & op1617=0b10 & rS unimpl
+:msrclr rD, imm15 is op05=0b100101 & rD & op1116=0b100010 & imm15 unimpl
+:msrset rD, imm15 is op05=0b100101 & rD & op1116=0b100000 & imm15 unimpl
 
 :mul rD, RA, RB is op05=0b010000 & rD & RA & RB & op2131=0b00000000000 {
 	rD = RA * RB;
@@ -588,53 +588,53 @@ RB: rB is rB             {export rB;}
 }
 
 :rtbd RA, imm is op05=0b101101 & op610=0b10010 & RA & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      tmp=tmp+RA;
      delayslot(1);
      return [tmp];
 }
 
 :rtbd RA, imm is op05=0b101101 & op610=0b10010 & RA & imm & immop=1 {
-     tmp:4=RA+(imm_msb<<16)+imm;
+     local tmp:4=RA+(imm_msb<<16)+imm;
      delayslot(1);
      return [tmp];
 }
 
 :rted RA, imm is op05=0b101101 & op610=0b10100 & RA & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      tmp=tmp+RA;
      delayslot(1);
      return [tmp];
 }
 
 :rted RA, imm is op05=0b101101 & op610=0b10100 & RA & imm & immop=1 {
-     tmp:4=RA+(imm_msb<<16)+imm;
+     local tmp:4=RA+(imm_msb<<16)+imm;
      delayslot(1);
      return [tmp];
 }
 
 :rtid RA, imm is op05=0b101101 & op610=0b10001 & RA & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      tmp=tmp+RA;
      delayslot(1);
      return [tmp];
 }
 
 :rtid RA, imm is op05=0b101101 & op610=0b10001 & RA & imm & immop=1 {
-     tmp:4=RA+(imm_msb<<16)+imm;
+     local tmp:4=RA+(imm_msb<<16)+imm;
      delayslot(1);
      return [tmp];
 }
 
 :rtsd RA, imm is op05=0b101101 & op610=0b10000 & RA & imm & immop=0 {
-      tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      tmp=tmp+RA;
      delayslot(1);
      return [tmp];
 }
 
 :rtsd RA, imm is op05=0b101101 & op610=0b10000 & RA & imm & immop=1 {
-     tmp:4=RA+(imm_msb<<16)+imm;
+     local tmp:4=RA+(imm_msb<<16)+imm;
      delayslot(1);
      return [tmp];
 }
@@ -744,33 +744,42 @@ RB: rB is rB             {export rB;}
 
 
 :rsub rD, RA, RB is op05=0b000001 & rD & RA & RB & op2131=0b00000000000 {
+     local tmp_a:4 = RA;
+     local tmp_b:4 = RB;
      rD = RB + ~RA + 1;
-     $(MSR_C) = sborrow(RB, RA);
+     $(MSR_C) = sborrow(tmp_b, tmp_a);
 }
 :rsubc rD, RA, RB is op05=0b000011 & rD & RA & RB & op2131=0b00000000000 {
+    local tmp_a:4 = RA;
+    local tmp_b:4 = RB;
     local tmp:4 = zext($(MSR_C));
     rD = RB + ~RA + tmp;
-    $(MSR_C) = sborrow(RB, RA);
+    $(MSR_C) = sborrow(tmp_b, tmp_a);
 }
 :rsubk rD, RA, RB is op05=0b000101 & rD & RA & RB & op2131=0b00000000000 {
     rD = RB + ~RA + 1;
 }
 
 :cmp rD, RA, RB is op05=0b000101 & rD & RA & RB & op2131=0b00000000001 {
-	rD = RB + ~RA + 1;
-    rD[31,1] = (RA s> RB);
+    local tmp_a:4 = RA;
+    local tmp_b:4 = RB;
+    rD = RB + ~RA + 1;
+    rD[31,1] = (tmp_a s> tmp_b);
 }
 :cmpu rD, RA, RB is op05=0b000101 & rD & RA & RB & op2131=0b00000000011 {
+     local tmp_a:4 = RA;
+     local tmp_b:4 = RB;
 	rD = RB + ~RA + 1;
-	rD[31,1] = (RA > RB);
+	rD[31,1] = (tmp_a > tmp_b);
 }
 :rsubkc rD, RA, RB is op05=0b000111 & rD & RA & RB & op2131=0b00000000000 {
      local tmp:4 = zext($(MSR_C));
      rD = RB + ~RA + tmp;
 }
 :rsubi rD, RA, imm is op05=0b001001 & rD & RA & imm {
+     local tmp_a:4 = RA;
 	rD = imm + ~RA + 1;
-	$(MSR_C) = sborrow(imm, RA);
+	$(MSR_C) = sborrow(imm, tmp_a);
 }
 :addic rD, RA, imm is op05=0b001010 & rD & RA & imm {
     local tmp:4 = zext($(MSR_C));
