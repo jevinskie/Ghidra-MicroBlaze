@@ -539,7 +539,7 @@ RB: rB is rB             {export rB;}
 :mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS unimpl
 
 :mfs rD, rS is op05=0b100101 & rD & op1115=0b00000 & op1617=0b10 & rS & imm14=0x0000 {
-     rD = pc;
+     rD = inst_start;
 }
 
 :mfse rD, rS is op05=0b100101 & rD & op1115=0b01000 & op1617=0b10 & rS {}
