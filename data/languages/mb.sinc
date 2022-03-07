@@ -408,7 +408,7 @@ RB: rB is rB             {export rB;}
 }
 
 :braid imm is op05=0b101110 & op610=0 & op1115=0b11000 & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
+     local tmp:4=sext(imm[0,16]);
      delayslot(1);
      call [tmp];
 }
@@ -422,22 +422,22 @@ RB: rB is rB             {export rB;}
 
 :brald rD, RB is op05=0b100110 & rD & op1115=0b11100 & RB & op2131=0b00000000000 {
     local tmp:4 = RB;
-    rD = inst_start;
     delayslot(1);
+    rD = inst_start;
     call [tmp];
 }
 
 :bralid rD, imm is op05=0b101110 & rD & op1115=0b11100 & imm & immop=0 {
-     tmp:4=sext(imm[0,16]);
-     rD=inst_start;
+     local tmp:4=sext(imm[0,16]);
      delayslot(1);
+     rD=inst_start;
      call [tmp];
 }
 
 :bralid rD, imm is op05=0b101110 & rD & op1115=0b11100 & imm & immop=1 {
      local tmp:4 = imm + (imm_msb<<16);
-     rD=inst_start;
      delayslot(1);
+     rD=inst_start;
      call [tmp];
 }
 
@@ -477,15 +477,15 @@ RB: rB is rB             {export rB;}
 :brlid rD, imm is op05=0b101110 & rD & op1115=0b10100 & imm & immop=0 {
      local tmp:4=sext(imm[0,16]);
      tmp=tmp+inst_start;
-     rD=tmp;
      delayslot(1);
+     rD=tmp;
      call [tmp];
 }
 
 :brlid rD, imm is op05=0b101110 & rD & op1115=0b10100 & imm & immop=1 {
      local tmp:4=inst_start+(imm_msb<<16)+imm;
-     rD=tmp;
      delayslot(1);
+     rD=tmp;
      call [tmp];
 }
 
@@ -690,7 +690,7 @@ RB: rB is rB             {export rB;}
 :srl rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000001000001 {
      local tmp:4 = RA;
         rD=RA >> 1;
-        $(MSR_C) = RA[0,1];
+        $(MSR_C) = tmp[0,1];
 }
 
 :sw rD, RA, RB is op05=0b110110 & rD & RA & RB & op2131=0b00000000000 {
