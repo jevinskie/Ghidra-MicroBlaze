@@ -423,7 +423,7 @@ RB: rB is rB             {export rB;}
 :brald rD, RB is op05=0b100110 & rD & op1115=0b11100 & RB & op2131=0b00000000000 {
     local tmp:4 = RB;
     delayslot(1);
-    rD = inst_next;
+    rD = inst_start;
     call [tmp];
 }
 
