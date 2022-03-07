@@ -124,8 +124,10 @@ RB: rB is rB             {export rB;}
 }
 
 :add rD, RA, RB is op05=0b000000 & rD & RA & RB & op2131=0b00000000000 {
+     local tmp_a:4 = RA;
+     local tmp_b:4 = RB;
      rD = RA + RB;
-     $(MSR_C) = scarry(RA, RB);
+     $(MSR_C) = scarry(tmp_a, tmp_b);
 }
 
 :addc rD, RA, RB is op05=0b000010 & rD & RA & RB & op2131=0b00000000000 {
@@ -145,15 +147,17 @@ RB: rB is rB             {export rB;}
 }
 
 :addi rD, RA, imm  is op05=0b001000 & rD & RA & imm & immop=0 {
-    tmp:4=sext(imm[0,16]);
+    local tmp:4=sext(imm[0,16]);
+    local tmp_a = RA;
     rD = RA+ tmp;
-    $(MSR_C) = scarry(RA, tmp);
+    $(MSR_C) = scarry(tmp_a, tmp);
 }
 
 :addi rD, RA, imm  is op05=0b001000 & rD & RA & imm & immop=1 {
-    tmp:4=imm+(imm_msb<<16);
+    local tmp:4=imm+(imm_msb<<16);
+    local tmp_a:4 = RA;
     rD = RA+ tmp;
-    $(MSR_C) = scarry(RA, tmp);
+    $(MSR_C) = scarry(tmp_a, tmp);
 }
 
 :addik rD, RA, imm is op05=0b001100 & rD & RA & imm & immop=0 {
