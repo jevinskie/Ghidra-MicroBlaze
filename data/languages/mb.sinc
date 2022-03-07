@@ -670,20 +670,23 @@ RB: rB is rB             {export rB;}
 }
 
 :sra rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000000000001 {
+     local tmp:4 = RA;
 	rD = RA s>> 1;
-        $(MSR_C) = RA[0,1];
+        $(MSR_C) = tmp[0,1];
 }
 
 :src rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000000100001 {
+     local tmp:4 = RA;
 	rD = RA s>> 1;
 	rD[31,1]=$(MSR_C);
-        $(MSR_C) = RA[0,1];
+        $(MSR_C) = tmp[0,1];
 }
 
 
 :srl rD, RA is op05=0b100100 & rD & RA & op1631=0b0000000001000001 {
+     local tmp:4 = RA;
         rD=RA >> 1;
-        $(MSR_C) = RA[0,1];
+        $(MSR_C) = tmp[0,1];
 }
 
 :sw rD, RA, RB is op05=0b110110 & rD & RA & RB & op2131=0b00000000000 {
