@@ -210,16 +210,18 @@ RB: rB is rB             {export rB;}
 
 :beqid RA, imm is op05=0b101111 & op610=0b10000 & RA & imm &immop=0 {
      local tmp:4 = inst_start + sext(imm[0,16]);
-     if (RA != 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv != 0) goto <out>;
      goto [tmp];
      <out>
 }
 
 :beqid RA, imm is op05=0b101111 & op610=0b10000 & RA & imm &immop=1 {
      local tmp:4 = inst_start + imm + (imm_msb<<16);
-     if (RA != 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv != 0) goto <out>;
      goto [tmp];
      <out>
 }
@@ -241,16 +243,18 @@ RB: rB is rB             {export rB;}
 
 :bgeid RA, imm is op05=0b101111 & op610=0b10101 & RA & imm & immop=0 {
      local tmp:4 = inst_start + sext(imm[0,16]);
-     if (RA s< 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s< 0) goto <out>;
      goto [tmp];
      <out>
 }
 
 :bgeid RA, imm is op05=0b101111 & op610=0b10101 & RA & imm & immop=1 {
      local tmp:4 = inst_start + imm + (imm_msb<<16);
-     if (RA s< 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s< 0) goto <out>;
      goto [tmp];
      <out>
 }
@@ -271,16 +275,18 @@ RB: rB is rB             {export rB;}
 
 :bgtid RA, imm is op05=0b101111 & op610=0b10100 & RA & imm & immop=0 {
      local tmp:4 = inst_start + sext(imm[0,16]);
-     if (RA s<= 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s<= 0) goto <out>;
      goto [tmp];
      <out>
 }
 
 :bgtid RA, imm is op05=0b101111 & op610=0b10100 & RA & imm & immop=1 {
      local tmp:4 = inst_start + imm + (imm_msb<<16);
-     if (RA s<= 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s<= 0) goto <out>;
      goto [tmp];
      <out>
 }
@@ -301,16 +307,18 @@ RB: rB is rB             {export rB;}
 
 :bleid RA, imm is op05=0b101111 & op610=0b10011 & RA & imm & immop=0 {
      local tmp:4 = inst_start + sext(imm[0,16]);
-     if (RA s> 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s> 0) goto <out>;
      goto [tmp];
      <out>
 }
 
 :bleid RA, imm is op05=0b101111 & op610=0b10011 & RA & imm & immop=1 {
      local tmp:4 = inst_start + imm + (imm_msb<<16);
-     if (RA s> 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s> 0) goto <out>;
      goto [tmp];
      <out>
 }
@@ -331,16 +339,18 @@ RB: rB is rB             {export rB;}
 
 :bltid RA, imm is op05=0b101111 & op610=0b10010 & RA & imm & immop=0 {
      local tmp:4 = inst_start + sext(imm[0,16]);
-     if ( RA s>= 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s>= 0) goto <out>;
      goto [tmp];
      <out>
 }
 
 :bltid RA, imm is op05=0b101111 & op610=0b10010 & RA & imm & immop=1 {
      local tmp:4 = inst_start + imm + (imm_msb<<16);
-     if ( RA s>= 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv s>= 0) goto <out>;
      goto [tmp];
      <out>
 }
@@ -361,16 +371,18 @@ RB: rB is rB             {export rB;}
 
 :bneid RA, imm is op05=0b101111 & op610=0b10001 & RA & imm & immop=0 {
      local tmp:4 = inst_start + sext(imm[0,16]);
-     if (RA == 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv == 0) goto <out>;
      goto [tmp];
      <out>
 }
 
 :bneid RA, imm is op05=0b101111 & op610=0b10001 & RA & imm & immop=1 {
      local tmp:4 = inst_start + imm + (imm_msb<<16);
-     if (RA == 0) goto <out>;
+     local condv:4 = RA;
      delayslot(1);
+     if (condv == 0) goto <out>;
      goto [tmp];
      <out>
 }
@@ -399,8 +411,8 @@ RB: rB is rB             {export rB;}
    
 :brld rD, RB is op05=0b100110 & rD & op1115=0b10100 & RB & op2131=0b00000000000 {
     local tmp:4 = inst_start + RB;
-    rD = inst_start;
     delayslot(1);
+    rD = inst_start;
     call [tmp];
 }
 
