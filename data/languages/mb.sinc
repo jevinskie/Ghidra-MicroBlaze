@@ -484,8 +484,8 @@ RB: rB is rB             {export rB;}
 }
 
 :brlid rD, imm is op05=0b101110 & rD & op1115=0b10100 & imm & immop=0 {
-     local tmp:4=sext(imm[0,16]);
-     rD=tmp+inst_start;
+     local tmp:4=inst_start+sext(imm[0,16]);
+     rD=tmp;
      delayslot(1);
      call [tmp];
 }
