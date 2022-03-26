@@ -916,11 +916,13 @@ RB: rB is rB             {export rB;}
 }
 
 :brk rD, RB is op05=0b100110 & rD & op1115=0b01100 & RB & op2131=0b00000000000 {
+     rD=inst_start;
      software_interrupt(RB);
 }
 
 :brki rD, imm is op05=0b101110 & rD & op1115=0b01100 & imm {
      local tmp:4 = imm;
+     rD=inst_start;
      software_interrupt(tmp);
 }
 
